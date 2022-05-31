@@ -1,3 +1,5 @@
+import { Alert } from "bootstrap";
+import { Button } from "bootstrap";
 import { companiesData } from "./companies-data";
 import { extraRecord } from "./extraRecord";
 
@@ -30,28 +32,52 @@ console.log ("Filtered Index Count",manipulatedCount)
 //TODO: Create a new array with just elements of a certain state.
 
 const filteredData = function (record) {
-  console.log("RECORD", record);
-  const state = "tx";
+ // console.log("RECORD", record);
+  const state = "ca";
   return record.fieldData.State.toLowerCase() === state;
 };
 
-const mappedData = function (record){
+const mappedData = function (c){
   const obj = {
-    companyName: record.fieldData.CompanyName,
-    postCode: record.fieldData.Zip
+    companyName: c.fieldData.CompanyName,
+    postCode: c.fieldData.Zip,
+    Id: c.fieldData.Id
   }
   return obj ;
 };
 
+
+// Grab the 'after' element from the html
+const after = document.getElementById("after");
+
+//Create a button for each record...
+const createButton = function (record){
+console.log(record);
+//Create an html element of type 'button':
+const button = document.createElement("button");
+//Set the label:
+button.innerText = record.companyName;
+button.className = "col-12 mt-2 btn btn-sm btn-primary";
+button.onclick = function(x){
+  alert("Company:" + record.companyName + ", ZipCode:" + record.postCode + ",ID:" + record.Id )
+};
+//draw the button(s) into the bit of the screen 'after':
+after.appendChild(button);
+
+}
+
+
 const manipulatedData = companiesData.filter(filteredData).map(mappedData);
 //const appendedData = manipulatedData.unshift(extraRecord);
+manipulatedData.forEach(createButton);
+
 
 //TODO: Create buttons for each record.
 //functions are here
 
 
 
-// Grab the 'after' element from the html
-const after = document.getElementById("after");
+
+
 before.innerHTML = JSON.stringify(companiesData, null, 2);
-after.innerHTML = JSON.stringify(manipulatedData, null, 2);
+//after.innerHTML = JSON.stringify(manipulatedData, null, 2);
